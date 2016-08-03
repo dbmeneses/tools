@@ -1,0 +1,18 @@
+#/bin/sh
+
+version="162.1447.26"
+inst_loc="~/Downloads/idea-IC-$version"
+
+sudo tee /usr/share/applications/jetbrains-idea-ce.desktop > /dev/null << EOF
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=IntelliJ
+Exec=$inst_loc/bin/idea.sh
+Icon=$inst_loc/bin/idea.png
+EOF
+
+sudo chmod 644 /usr/share/applications/jetbrains-idea-ce.desktopp
+sudo chown root:root /usr/share/applications/jetbrains-idea-ce.desktop
+
+gsettings set com.canonical.Unity.Launcher favorites "$(gsettings get com.canonical.Unity.Launcher favorites | sed "s/, *'application://intellij.desktop' *//g" | sed "s/'application://intellij.desktop' *, *//g" | sed -e "s/]$/, 'application://intellij.desktop']/")"
