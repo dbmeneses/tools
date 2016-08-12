@@ -1,0 +1,8 @@
+#/bin/sh
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: files_used program_to_run"
+  exit 1
+fi
+
+sudo strace -f -o /tmp/log.trace su $USER -c "$1" && cat /tmp/log.trace | sed '/[[:digit:]]* \(open\|stat\)/!d' | sed "s|.*\"\(.*\)\".*|\1|" | sort | uniq
