@@ -1,0 +1,70 @@
+# staging
+git add .
+git add -A .  #also removes
+git rm file
+git rm --cached  file #unstage file, dont remove file itself from working area
+git rm -r --cached dir
+
+# commit
+git commit -m "message"
+git commit -m "message" unstaged_file
+git commit --amend -m "message"    #overrides last commit
+
+# symbolic references
+git log HEAD~4..HEAD      #all commits reachable from HEAD and not from HEAD~4
+
+#clone
+git clone repo.git
+git clone --bare repo.git
+
+#repos
+git remote add origin ../remote-repo.git
+
+
+# config
+git config --global user.name "Firstname Lastname"
+git config --global user.email "your.email@example.org"
+
+git config --local ...
+git config --system ...
+
+
+# ignore
+echo "target/" > .gitignore
+echo "target/" > .git/info/exclude
+git config --global core.excludesfile ~/.gitignore
+
+
+#create repo
+git init
+git init --bare
+
+#status
+git status
+git diff
+git diff master branch1
+git diff master...branch1
+
+#log
+git log
+git log --oneline
+git log --abbrev-commit
+git log --graph --oneline
+git log file
+git log -p file #shows also diffs
+git log --follow -p file
+git log --author=xxx  #also --committer
+
+
+#branches
+git branch
+git branch -a                   #including the ones in remote repos
+git branch to_create            #pointing at the current head
+git branch -b to_create                 #create and switch to it
+git branch -b old_name new_name
+git branch -d to_delete
+
+#blame (changes per line)
+git blame file
+git blame -p file               #more details
+git blame -L 1,2 file
