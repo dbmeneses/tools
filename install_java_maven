@@ -1,0 +1,26 @@
+#/bin/sh
+
+set -e
+echo "##### Updating repo and installing packages #####"
+apt-get update
+apt-get install -y libyaml-dev git libssl-dev curl vim software-properties-common python-software-properties htop unzip
+apt-add-repository ppa:git-core/ppa
+add-apt-repository ppa:webupd8team/java
+apt-get update
+
+echo "##### Update git ####"
+# to support the -C option that travis' scripts use
+apt-get -y install git
+
+echo "##### Installing maven #####"
+curl -sSO http://mirror.switch.ch/mirror/apache/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+tar xzf apache-maven-3.3.9-bin.tar.gz
+cp -r apache-maven-3.3.9 /usr/share/
+update-alternatives --install /usr/bin/mvn mvn /usr/share/apache-maven-3.3.9/bin/mvn 200 --slave /usr/bin/mvnDebug mvnDebug /usr/share/apache-maven-3.3.9/bin/mvnDebug
+update-alternatives --set mvn /usr/share/apache-maven-3.3.9/bin/mvn
+
+echo "##### Installing JDK 8 #####"
+echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+apt-get -y install oracle-java8-installer
+apt-get -y install oracle-java8-set-default
