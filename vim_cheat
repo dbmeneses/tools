@@ -1,0 +1,36 @@
+# delete
+[x]dd
+D
+
+# insert
+A
+I
+O
+i
+
+# move
+$
+(no)
+
+# search
+/
+?
+n
+N
+
+#edit
+~
+u
+
+# quit/save/settings
+w
+w >> file
+q
+q!
+set
+setl
+set all
+
+
+
+
