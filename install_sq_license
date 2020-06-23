@@ -1,0 +1,32 @@
+export GITHUB_TOKEN=XXX
+alias licde='curl -s -XGET -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/SonarSource/licenses/master/edition_testing/de.txt | sed -n 4p'
+alias licee='curl -s -XGET -H "Authorization: token $GITHUB_TOKEN" https://raw.githubusercontent.com/SonarSource/licenses/master/edition_testing/ee.txt | sed -n 4p'
+
+
+function _get_edition() {
+  local edition=`curl -s -XGET -u admin:admin http://localhost:9000/api/navigation/global | jq -r ".edition"`
+  echo "$edition"
+}
+
+function install_license() {
+  local edition=$(_get_edition)
+  echo "$edition"
+
+  case $edition in
+    "developer")
+      local license=$(licde)
+      ;;
+    "enterprise")
+      local license=$(licee)
+      ;;
+    *)
+      echo "Can't handle this edition"
+      return
+      ;;
+  esac
+  echo "$license"
+  curl -w "%{http_code}" -s -XPOST -u admin:admin http://localhost:9000/api/editions/set_license?license="$license"
+  local is_valid=`curl -s -XGET -u admin:admin http://localhost:9000/api/editions/is_valid_license | jq -r '.isValidLicense'`
+  echo -e "\nIs valid: $is_valid"
+
+}
