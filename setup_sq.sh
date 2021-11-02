@@ -1,8 +1,12 @@
-# MODIFY THIS LINE
+# 1) make github token available:
 #export GITHUB_TOKEN=token
+# 2) copy this file to ~/.setup_sq
+# 3) run: 
+#       $ echo '. .setup_sq2' >> ~/.profile 
+#       $ . .profile
 
 function _get_license() {
-  echo `curl -s -XGET -H "Authorization: token $GITHUB_TOKEN" "https://raw.githubusercontent.com/SonarSource/licenses/master/edition_testing/${1}.txt" | sed -n 4p`
+  echo `curl -s -XGET -H "Authorization: token $GITHUB_TOKEN" "https://raw.githubusercontent.com/SonarSource/licenses/master/edition_testing/${1}.txt" | sed -n 4p | tr -d '\\r'`
 }
 
 function _set_password() {
@@ -18,8 +22,8 @@ function _get_edition() {
 
 function _set_token() {
   echo "Creating token"
-  export TOKEN=$(curl -XPOST -s -u admin:admin "http://localhost:9000/api/user_tokens/generate?name=auto$RANDOM" | jq -r '.token')
-  echo "Token (exported to \$TOKEN): $TOKEN"
+  export SONAR_TOKEN=$(curl -XPOST -s -u admin:admin "http://localhost:9000/api/user_tokens/generate?name=auto$RANDOM" | jq -r '.token')
+  echo "Token (exported to \$SONAR_TOKEN): $SONAR_TOKEN"
 }
 
 function _set_license() {
