@@ -38,6 +38,12 @@ function _set_license() {
     "enterprise")
       local license="$(_get_license ee)"
       ;;
+    "datacenter")
+      local license="$(_get_license dce)"
+      ;;
+    "community")
+      return 0
+      ;;
     *)
       echo "Can't handle this edition"
       return 1
