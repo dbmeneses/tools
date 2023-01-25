@@ -2,7 +2,7 @@
 #export GITHUB_TOKEN=token
 # 2) copy this file to ~/.setup_sq
 # 3) run: 
-#       $ echo '. .setup_sq2' >> ~/.profile 
+#       $ echo '. .setup_sq' >> ~/.profile 
 #       $ . .profile
 
 function _get_license() {
