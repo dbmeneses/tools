@@ -8,7 +8,7 @@ sudo update-alternatives --install /usr/local/java/current java_home /usr/local/
 # 3. Add to ~/.bashrc:
 
 export JAVA_HOME=/usr/local/java/current
-export PATH="$PATH:$JAVA_HOME/bin"
+export PATH="$JAVA_HOME/bin:$PATH"
 alias change-java="sudo update-alternatives --config java_home && java -version && javac -version"
 
 # 4. Make it effective
