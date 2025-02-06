@@ -27,6 +27,11 @@ function _set_token() {
 }
 
 function _set_license() {
+  if [ -z "${GITHUB_TOKEN}" ]; then
+    echo "No GITHUB_TOKEN set!"
+    return 1
+  fi
+
   echo "Setting license"
   local edition=$(_get_edition)
   echo "Edition: $edition"
@@ -42,6 +47,7 @@ function _set_license() {
       local license="$(_get_license dce)"
       ;;
     "community")
+      echo "Community edition doesn't need a license!"
       return 0
       ;;
     *)
@@ -50,10 +56,20 @@ function _set_license() {
       ;;
   esac
   
-  curl --fail -s -XPOST -u admin:admin http://localhost:9000/api/editions/set_license?license="$license" &> /dev/null || return 1
+  curl --fail -s -XPOST -u admin:admin http://localhost:9000/api/editions/set_license?license="$license" &> /dev/null || {
+    echo "Unable to set license. Does the GITHUB_TOKEN have the repo permission and has SSO been configured for the token?"
+    echo "License value: ${license}";
+    return 1;
+  }
   local is_valid=$(curl -s -XGET -u admin:admin http://localhost:9000/api/editions/is_valid_license | jq -r '.isValidLicense')
-  return 0;
 
+  if [ ! -z "$is_valid" ]; then
+    echo "License set up successfully!"
+    return 0
+  else
+    echo "License not accepted by SonarQube!"
+    return 1
+  fi
 }
 
 function setup_sq() {
